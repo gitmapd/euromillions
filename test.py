@@ -41,6 +41,8 @@ class Bet:
     
     def auto_generate_bet(self):
         self.bet_numbers,self.bet_stars=generate_valid_numbers()
+    def user_generate_bet(self):
+        self.bet_numbers,self.bet_stars=user_generate_valid_numbers()
     
 
 
@@ -62,6 +64,38 @@ def generate_valid_numbers():
             stars.append(temp_star)
     return numbers,stars
 
+def user_generate_valid_numbers(user_numbers,user_stars):
+    numbers = []
+    stars = []
+    if not user_numbers.isdigit():
+        raise ValueError("Bet number must be an integer")
+    
+    if user_numbers in numbers:
+        raise ValueError("Bet number already exists")
+    
+    if int(user_numbers) < 1 or int(user_numbers) > 50:
+        raise ValueError("Bet number must be between 1 and 50")
+    
+    numbers.append(user_numbers)
+
+    if not user_stars.isdigit():
+        raise ValueError("Bet number must be an integer")
+    
+    if user_stars in stars:
+        raise ValueError("Bet number already exists")
+    
+    if int(user_stars) < 1 or int(user_stars) > 12:
+        raise ValueError("Bet number must be between 1 and 12")
+    
+    numbers.append(user_stars)
+
+    return numbers,stars
+    
+    while len(stars) < 2:
+        temp_star = random.randint(1, 12)
+        if temp_star not in stars:
+            stars.append(temp_star)
+    return numbers,stars
 
 def retorno_menu():
     menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu")
@@ -220,7 +254,38 @@ def play_game():
                     console.print(bets_table)
                     console.line()
         if option == 2:
-            exit()
+            ticket=Ticket()
+            #if prompt.Confirm.ask("Do you want to auto-generate a random ticket?", default=True):
+            if MyConfirm.ask("Do you want to to generate a manual ticket?", default=True):
+                    user_num_list = []
+                    num_bets = MyPrompt.ask(f"Enter number of bets")
+                    user_numbers = prompt.Prompt.ask(f"Enter number {len(num_bets) + 1}")
+                    while len(user_numbers) < 5:
+
+
+                    
+                    for _ in range(int(num_bets)):
+                        new_bet=Bet()
+                        new_bet.user_generate_bet()
+                        ticket.bets.append(new_bet)
+
+                    
+
+                    bets_table = table.Table(show_header=True, header_style="bold magenta",expand=True,highlight=True)
+                    bets_table.add_column("Apostas", justify="center")
+                    bets_table.add_column("Números", justify="center")
+                    bets_table.add_column("Estrelas", justify="left")
+
+            
+                    for i in track(range(int(num_bets)),description="A Processar..."):
+                        time.sleep(1) 
+                        tickets_numbers='  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_numbers)
+                        tickets_stars='  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_stars)
+                        bets_table.add_row('Aposta '+str(i + 1), tickets_numbers,tickets_stars)
+                    clear_screen()
+                    console.rule("Boletim", style="bold yellow")
+                    console.print(bets_table)
+                    console.line()
         time.sleep(5)
         retorno_menu()
         option = int(MyPrompt.ask("Select an option", choices=[str(key) for key in menu_retorno.keys()]))
