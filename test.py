@@ -7,6 +7,7 @@ import time
 from rich.progress import track
 from rich.console import Console
 
+
 console = Console()
 
 
@@ -62,35 +63,6 @@ def generate_valid_numbers():
     return numbers,stars
 
 
-
-
-menu_principal = {1: ['Criar Tickets','Um ou mais Tickets'], 2: ['Sair','Sair do Programa']}
-
-menu_tickets = {1: ['Criar Apostas','Uma ou mais Apostas'], 2: ['Sair','Voltar ao inicio']}
-
-menu_retorno = {1: ['Menu Principal','Talões'], 2: ['Apostas','Menu Apostas'], 3: ['Sair','Sair do Programa']}
-prizes = {
-      (5,2): {"label": "1st prize"},
-      (5,1): {"label": "2nd prize"},
-      (5,0): {"label": "3rd prize"},
-      (4,2): {"label": "4rd prize"},
-      (4,1): {"label": "5th prize"},
-      (3,2): {"label": "6th prize"},
-      (4,0): {"label": "7th prize"},
-      (2,2): {"label": "8th prize"},
-      (3,1): {"label": "9th prize"},
-      (3,0): {"label": "10th prize"},
-      (1,2): {"label": "11th prize"},
-      (2,1): {"label": "12th prize"},
-      (2,0): {"label": "13th prize"},
-    }
-
-def clear_screen():
-    if os.name == 'posix':
-        _ = os.system('clear')
-    else:
-        _ = os.system('cls')
-
 def retorno_menu():
     menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu")
     menu_table.add_column("ID", justify="center")
@@ -117,6 +89,72 @@ def tickets_menu():
     for key, value in menu_tickets.items():
         menu_table.add_row(str(key), value[0],value[1] )
     console.print(menu_table)
+
+menu_principal = {1: ['Criar Tickets','Um ou mais Tickets'], 2: ['Sair','Sair do Programa']}
+
+menu_tickets = {1: ['Criar Apostas','Uma ou mais Apostas'], 2: ['Sair','Voltar ao inicio']}
+
+menu_retorno = {1: ['Menu Principal','Talões'], 2: ['Apostas','Menu Apostas'], 3: ['Sair','Sair do Programa']}
+
+def retorno_menu():
+    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu",expand=True,highlight=True)
+    menu_table.add_column("ID", justify="center")
+    menu_table.add_column("Opções", justify="left")
+    menu_table.add_column("Descrições", justify="left")
+    for key, value in menu_retorno.items():
+        menu_table.add_row(str(key), value[0],value[1] )
+    console.print(menu_table)
+
+def retorno_menu():
+    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu",expand=True,highlight=True)
+    menu_table.add_column("ID", justify="center")
+    menu_table.add_column("Opções", justify="left")
+    menu_table.add_column("Descrições", justify="left")
+    for key, value in menu_retorno.items():
+        menu_table.add_row(str(key), value[0],value[1] )
+    console.print(menu_table)
+
+def principal_menu():
+    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu",expand=True,highlight=True)
+    menu_table.add_column("ID", justify="center")
+    menu_table.add_column("Opções", justify="left")
+    menu_table.add_column("Descrições", justify="left")
+    for key, value in menu_principal.items():
+        menu_table.add_row(str(key), value[0],value[1] )
+    console.print(menu_table)
+
+def tickets_menu():
+    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu",expand=True,highlight=True)
+    menu_table.add_column("ID", justify="center")
+    menu_table.add_column("Opções", justify="left")
+    menu_table.add_column("Descrições", justify="left")
+    for key, value in menu_tickets.items():
+        menu_table.add_row(str(key), value[0],value[1] )
+    console.print(menu_table)
+
+prizes = {
+      (5,2): {"label": "1st prize"},
+      (5,1): {"label": "2nd prize"},
+      (5,0): {"label": "3rd prize"},
+      (4,2): {"label": "4rd prize"},
+      (4,1): {"label": "5th prize"},
+      (3,2): {"label": "6th prize"},
+      (4,0): {"label": "7th prize"},
+      (2,2): {"label": "8th prize"},
+      (3,1): {"label": "9th prize"},
+      (3,0): {"label": "10th prize"},
+      (1,2): {"label": "11th prize"},
+      (2,1): {"label": "12th prize"},
+      (2,0): {"label": "13th prize"},
+    }
+
+def clear_screen():
+    if os.name == 'posix':
+        _ = os.system('clear')
+    else:
+        _ = os.system('cls')
+
+
 
 def check_ticket_bets(ticket):
     bet_numbers = 0
@@ -164,20 +202,21 @@ def play_game():
                         new_bet.auto_generate_bet()
                         ticket.bets.append(new_bet)
 
-                    console.rule("Your Bets", style="bold yellow")
+                    
 
-                    bets_table = table.Table(show_header=True, header_style="bold magenta")
-                    bets_table.add_column("Bet", justify="center")
-                    bets_table.add_column("Numbers", justify="left")
-                    bets_table.add_column("Stars", justify="left")
+                    bets_table = table.Table(show_header=True, header_style="bold magenta",expand=True,highlight=True)
+                    bets_table.add_column("Apostas", justify="center")
+                    bets_table.add_column("Números", justify="center")
+                    bets_table.add_column("Estrelas", justify="left")
 
             
                     for i in track(range(int(num_bets)),description="A Processar..."):
                         time.sleep(1) 
                         tickets_numbers='  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_numbers)
                         tickets_stars='  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_stars)
-                        bets_table.add_row(str(i + 1), tickets_numbers,tickets_stars)
+                        bets_table.add_row('Aposta '+str(i + 1), tickets_numbers,tickets_stars)
                     clear_screen()
+                    console.rule("Boletim", style="bold yellow")
                     console.print(bets_table)
                     console.line()
         if option == 2:
@@ -190,7 +229,7 @@ def play_game():
         elif option == 2:
             tickets_menu()
         elif option == 3:
-            exec()
+            exit()
                     
 
 
