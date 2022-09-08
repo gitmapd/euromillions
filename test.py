@@ -90,39 +90,9 @@ def user_generate_valid_numbers(user_numbers,user_stars):
     numbers.append(user_stars)
 
     return numbers,stars
-    
-    while len(stars) < 2:
-        temp_star = random.randint(1, 12)
-        if temp_star not in stars:
-            stars.append(temp_star)
-    return numbers,stars
 
-def retorno_menu():
-    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu")
-    menu_table.add_column("ID", justify="center")
-    menu_table.add_column("Opções", justify="left")
-    menu_table.add_column("Descrições", justify="left")
-    for key, value in menu_retorno.items():
-        menu_table.add_row(str(key), value[0],value[1] )
-    console.print(menu_table)
 
-def principal_menu():
-    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu")
-    menu_table.add_column("ID", justify="center")
-    menu_table.add_column("Opções", justify="left")
-    menu_table.add_column("Descrições", justify="left")
-    for key, value in menu_principal.items():
-        menu_table.add_row(str(key), value[0],value[1] )
-    console.print(menu_table)
 
-def tickets_menu():
-    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu")
-    menu_table.add_column("ID", justify="center")
-    menu_table.add_column("Opções", justify="left")
-    menu_table.add_column("Descrições", justify="left")
-    for key, value in menu_tickets.items():
-        menu_table.add_row(str(key), value[0],value[1] )
-    console.print(menu_table)
 
 menu_principal = {1: ['Criar Tickets','Um ou mais Tickets'], 2: ['Sair','Sair do Programa']}
 
@@ -130,14 +100,6 @@ menu_tickets = {1: ['Criar Apostas','Uma ou mais Apostas'], 2: ['Sair','Voltar a
 
 menu_retorno = {1: ['Menu Principal','Talões'], 2: ['Apostas','Menu Apostas'], 3: ['Sair','Sair do Programa']}
 
-def retorno_menu():
-    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu",expand=True,highlight=True)
-    menu_table.add_column("ID", justify="center")
-    menu_table.add_column("Opções", justify="left")
-    menu_table.add_column("Descrições", justify="left")
-    for key, value in menu_retorno.items():
-        menu_table.add_row(str(key), value[0],value[1] )
-    console.print(menu_table)
 
 def retorno_menu():
     menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu",expand=True,highlight=True)
@@ -259,14 +221,15 @@ def play_game():
             if MyConfirm.ask("Do you want to to generate a manual ticket?", default=True):
                     user_num_list = []
                     num_bets = MyPrompt.ask(f"Enter number of bets")
-                    user_numbers = prompt.Prompt.ask(f"Enter number {len(num_bets) + 1}")
-                    while len(user_numbers) < 5:
+                    user_numbers = prompt.Prompt.ask(f"Enter number {len(user_num_list) + 1}")
+                    while len(user_num_list) < 5:
+                        user_num_list.append(user_numbers)
 
 
                     
                     for _ in range(int(num_bets)):
                         new_bet=Bet()
-                        new_bet.user_generate_bet()
+                        new_bet.user_generate_bet(user_num_list)
                         ticket.bets.append(new_bet)
 
                     
