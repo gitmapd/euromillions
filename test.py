@@ -159,34 +159,23 @@ def clear_screen():
 
 def user_generate_valid_numbers(user_num_list):
         for x in user_num_list:
-            while True:
-                try:
-                    if not x.isdigit():
-                        raise ValueError("Número não é um dígito")
-                    if len(list(filter(lambda y: y==x, user_num_list))) > 1:
-                        raise ValueError("Número já existe")
-                    if int(x) < 1 or int(x) > 50:
-                        raise ValueError("Número deve estar entre 1 e 50")
-                except ValueError as f:
-                            console.print("Estrela errada: ",f,style="bold red")
-                else:
-                    break
+            if not x.isdigit():
+                raise ValueError("Número não é um dígito")
+            if len(list(filter(lambda y: y==x, user_num_list))) > 1:
+                    raise ValueError("Número já existe")
+            if int(x) < 1 or int(x) > 50:
+                raise ValueError("Número deve estar entre 1 e 50")
+            
         return user_num_list
 
 def user_generate_valid_stars(user_stars_list):
         for x in user_stars_list:
-            while True:
-                try:
-                    if not x.isdigit():
-                        raise ValueError("Estrela não é um dígito")
-                    if len(list(filter(lambda y: y==x, user_stars_list))) > 1:
-                        raise ValueError("Estrela já existe")
-                    if int(x) < 1 or int(x) > 12:
-                        raise ValueError("Estrela tem de ser entre 1 e 12")
-                except ValueError as e:
-                            console.print("Número errado: ",e,style="bold red") 
-                else:
-                    break
+            if not x.isdigit():
+                raise ValueError("Estrela não é um dígito")
+            if len(list(filter(lambda y: y==x, user_stars_list))) > 1:
+                raise ValueError("Estrela já existe")
+            if int(x) < 1 or int(x) > 12:
+                raise ValueError("Estrela tem de ser entre 1 e 12")
         return user_stars_list 
 
 # A prize consists how many numbers and stars are common to the
@@ -256,19 +245,28 @@ def play_game():
                 for i in range(int(num_bets)):
                         user_num_list = []
                         while len(user_num_list) < 5:
-                            user_numbers = MyPrompt.ask(f"Enter Numbers {len(user_num_list) + 1}: ")
-                            user_num_list.append(user_numbers)
-                        
+                            user_number = MyPrompt.ask(f"Enter Numbers {len(user_num_list) + 1}: ")
+                            try:
+                                user_generate_valid_numbers(user_num_list + [user_number])
+                            except Exception as e:
+                                print(e)
+                            else:
+                                user_num_list.append(user_number)
+
                         user_stars_list = []
                         while len(user_stars_list) < 2:
-                            user_stars = MyPrompt.ask(f"Enter Stars {len(user_stars_list) + 1}")
-                            user_stars_list.append(user_stars)
+                            user_star = MyPrompt.ask(f"Enter Stars {len(user_stars_list) + 1}")
+                            try:
+                                user_generate_valid_stars(user_stars_list + [user_star])
+                            except Exception as e:
+                                print(e)
+                            else:
+                                user_stars_list.append(user_star)
                             
-                            new_bet.set_bet_numbers(user_generate_valid_numbers(user_num_list))
-                            new_bet.set_bet_stars(user_generate_valid_stars(user_stars_list))
+                        new_bet.set_bet_numbers(user_num_list)
+                        new_bet.set_bet_stars(user_stars_list)
                         
                 ticket.bets.append(new_bet)
-
                 bets_table = table.Table(
                 show_header=True, header_style="bold magenta", expand=True, highlight=True)
                 bets_table.add_column("Apostas", justify="center")
@@ -280,12 +278,11 @@ def play_game():
                     tickets_numbers = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_numbers)
                     tickets_stars = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_stars)
                     bets_table.add_row('Aposta '+str(i + 1), tickets_numbers, tickets_stars)
-                    clear_screen()
                     console.rule("Boletim", style="bold yellow")
                     console.print(bets_table)
                     console.line()
-        #time.sleep(5)
-        #retorno_menu()
+        time.sleep(5)
+        retorno_menu()
         option = int(MyPrompt.ask("Select an option", choices=[str(key) for key in menu_retorno.keys()]))
         if option == 1:
             principal_menu()
