@@ -142,32 +142,34 @@ def create_manual_tickets():
     while not num_tickets in range(1,6):
         num_tickets = int(MyPrompt.ask(f"Introduza o número de boletins"))
     print_menu(menu_automatico_manual)
-    if MyConfirm.ask("Do you want to to generate a manual ticket?", default=True):
-        num_bets = MyPrompt.ask(f"Enter number of bets")
-        for i in range(int(num_bets)):
-            user_num_list = []
-            while len(user_num_list) < 5:
-                user_number = MyPrompt.ask(f"Enter Numbers {len(user_num_list) + 1}: ")
-            try:
-                user_generate_valid_numbers(user_num_list + [user_number])
-            except Exception as e:
-                print(e)
-            else:
-                user_num_list.append(user_number)
-
-            user_stars_list = []
-            while len(user_stars_list) < 2:
-                user_star = MyPrompt.ask(f"Enter Stars {len(user_stars_list) + 1}")
+    option = int(MyPrompt.ask("Select an option", choices=[str(key) for key in menu_automatico_manual.keys()]))
+    elif option == 2:
+        if MyConfirm.ask("Do you want to to generate a manual ticket?", default=True):
+            num_bets = MyPrompt.ask(f"Enter number of bets")
+            for i in range(int(num_bets)):
+                user_num_list = []
+                while len(user_num_list) < 5:
+                    user_number = MyPrompt.ask(f"Enter Numbers {len(user_num_list) + 1}: ")
                 try:
-                    user_generate_valid_stars(user_stars_list + [user_star])
+                    user_generate_valid_numbers(user_num_list + [user_number])
                 except Exception as e:
                     print(e)
                 else:
-                    user_stars_list.append(user_star)
+                    user_num_list.append(user_number)
+
+                user_stars_list = []
+                while len(user_stars_list) < 2:
+                    user_star = MyPrompt.ask(f"Enter Stars {len(user_stars_list) + 1}")
+                    try:
+                        user_generate_valid_stars(user_stars_list + [user_star])
+                    except Exception as e:
+                        print(e)
+                    else:
+                        user_stars_list.append(user_star)
                             
-                new_bet.set_bet_numbers(user_num_list)
-                new_bet.set_bet_stars(user_stars_list)
-            ticket.bets.append(new_bet)
+                    new_bet.set_bet_numbers(user_num_list)
+                    new_bet.set_bet_stars(user_stars_list)
+                ticket.bets.append(new_bet)
 
 def play_game():
     game = Game()
@@ -182,7 +184,7 @@ def play_game():
             str(key) for key in menu_principal.keys()]))
         if option == 1:
             create_auto_tickets()
-        if option == 2:
+        elif option == 2:
             create_manual_tickets()
                 
         
