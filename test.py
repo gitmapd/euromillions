@@ -216,27 +216,33 @@ def play_game():
                      str(key) for key in menu_tickets.keys()]))
         if option == 1:
             ticket = Ticket()
-            if MyConfirm.ask("Do you want to auto-generate a random ticket?", default=True):
-                num_bets = MyPrompt.ask(f"Enter number of bets")
-                for _ in range(int(num_bets)):
-                    new_bet = Bet()
-                    new_bet.auto_generate_bet()
-                    ticket.bets.append(new_bet)
+            try:
+                num_tickets = MyPrompt.ask(f"Enter number of tickets")
+                if 0 < num_tickets < 6:
+                    continue
+            except Exception as e:
+                print(e)
+                if MyConfirm.ask("Do you want to auto-generate a random ticket?", default=True):
+                    num_bets = MyPrompt.ask(f"Enter number of bets")
+                    for _ in range(int(num_bets)):
+                        new_bet = Bet()
+                        new_bet.auto_generate_bet()
+                        ticket.bets.append(new_bet)
 
-                bets_table = table.Table(show_header=True, header_style="bold magenta", expand=True, highlight=True)
-                bets_table.add_column("Apostas", justify="center")
-                bets_table.add_column("Números", justify="center")
-                bets_table.add_column("Estrelas", justify="left")
+                    bets_table = table.Table(show_header=True, header_style="bold magenta", expand=True, highlight=True)
+                    bets_table.add_column("Apostas", justify="center")
+                    bets_table.add_column("Números", justify="center")
+                    bets_table.add_column("Estrelas", justify="left")
 
-                for i in track(range(int(num_bets)), description="A Processar..."):
-                    time.sleep(1)
-                    tickets_numbers = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_numbers)
-                    tickets_stars = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_stars)
-                    bets_table.add_row('Aposta '+str(i + 1),tickets_numbers, tickets_stars)
-                clear_screen()
-                console.rule("Boletim", style="bold yellow")
-                console.print(bets_table)
-                console.line()
+                    for i in track(range(int(num_bets)), description="A Processar..."):
+                        time.sleep(1)
+                        tickets_numbers = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_numbers)
+                        tickets_stars = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_stars)
+                        bets_table.add_row('Aposta '+str(i + 1),tickets_numbers, tickets_stars)
+                    clear_screen()
+                    console.rule("Boletim", style="bold yellow")
+                    console.print(bets_table)
+                    console.line()
         if option == 2:
             ticket = Ticket()
             new_bet = Bet()
