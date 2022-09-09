@@ -158,28 +158,28 @@ def clear_screen():
 
 
 def user_generate_valid_numbers(user_num_list):
-    while True:
         for x in user_num_list:
-            if not x.isdigit():
-                raise ValueError("Número não é um dígito")
-            if len(list(filter(lambda y: y==x, user_num_list))) > 1:
-                raise ValueError("Número já existe")
-            if int(x) < 1 or int(x) > 50:
-                raise ValueError("Número deve estar entre 1 e 50")
-        break
-    return user_num_list
+            while True:
+                if not x.isdigit():
+                    raise ValueError("Número não é um dígito")
+                if len(list(filter(lambda y: y==x, user_num_list))) > 1:
+                    raise ValueError("Número já existe")
+                if int(x) < 1 or int(x) > 50:
+                    raise ValueError("Número deve estar entre 1 e 50")
+                break
+        return user_num_list
 
 def user_generate_valid_stars(user_stars_list):
-    while True:
         for x in user_stars_list:
-            if not x.isdigit():
-                raise ValueError("Estrela não é um dígito")
-            if len(list(filter(lambda y: y==x, user_stars_list))) > 1:
-                raise ValueError("Estrela já existe")
-            if int(x) < 1 or int(x) > 12:
-                raise ValueError("Estrela tem de ser entre 1 e 12")
-        break
-    return user_stars_list 
+            while True:
+                if not x.isdigit():
+                    raise ValueError("Estrela não é um dígito")
+                if len(list(filter(lambda y: y==x, user_stars_list))) > 1:
+                    raise ValueError("Estrela já existe")
+                if int(x) < 1 or int(x) > 12:
+                    raise ValueError("Estrela tem de ser entre 1 e 12")
+                break
+        return user_stars_list 
 
 # A prize consists how many numbers and stars are common to the
 # Game winning key.(5,2) -> "1st prize", that means all numbers and stars
