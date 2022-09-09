@@ -169,7 +169,8 @@ def user_generate_valid_numbers(user_num_list):
                         raise ValueError("Número deve estar entre 1 e 50")
                 except ValueError as f:
                             console.print("Estrela errada: ",f,style="bold red")
-                break
+                else:
+                    break
         return user_num_list
 
 def user_generate_valid_stars(user_stars_list):
@@ -184,7 +185,8 @@ def user_generate_valid_stars(user_stars_list):
                         raise ValueError("Estrela tem de ser entre 1 e 12")
                 except ValueError as e:
                             console.print("Número errado: ",e,style="bold red") 
-                break
+                else:
+                    break
         return user_stars_list 
 
 # A prize consists how many numbers and stars are common to the
@@ -264,8 +266,6 @@ def play_game():
                             
                             new_bet.set_bet_numbers(user_generate_valid_numbers(user_num_list))
                             new_bet.set_bet_stars(user_generate_valid_stars(user_stars_list))
-                else:
-                    break
                         
                 ticket.bets.append(new_bet)
 
