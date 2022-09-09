@@ -117,6 +117,22 @@ def user_generate_valid_stars(user_stars_list):
             if int(x) < 1 or int(x) > 12:
                 raise ValueError("Estrela tem de ser entre 1 e 12")
         return user_stars_list 
+def create_tickets():
+    new_bet=Bet()
+    ticket=Ticket()
+    num_tickets = 0
+    while not num_tickets in range(1,6):
+        num_tickets = int(MyPrompt.ask(f"Introduza o número de boletins"))
+    print_menu(menu_automatico_manual)
+    option = int(MyPrompt.ask("Select an option", choices=[str(key) for key in menu_automatico_manual.keys()]))
+    if option == 1:
+        if MyConfirm.ask("Do you want to auto-generate a random ticket?", default=True):
+            for _ in range(num_tickets):
+                num_bets = MyPrompt.ask(f"Enter number of bets")
+                for _ in range(int(num_bets)):
+                    new_bet.set_bet_numbers(generate_valid_numbers())
+                    new_bet.set_bet_stars(generate_valid_stars())
+                    ticket.bets.append(new_bet)
 
 def play_game():
     game = Game()
@@ -125,30 +141,18 @@ def play_game():
 
     game.set_winning_stars(generate_valid_stars())
 
-    print_menu(menu_principal)
     ticket=Ticket()
     new_bet = Bet()
     while True:
+        print_menu(menu_principal)
         option = int(MyPrompt.ask("Selecionar opção", choices=[
             str(key) for key in menu_principal.keys()]))
         if option == 1:
-            num_tickets = 0
-            while not num_tickets in range(1,6):
-                num_tickets = int(MyPrompt.ask(f"Introduza o número de boletins"))
-            print_menu(menu_automatico_manual)
-            option = int(MyPrompt.ask("Select an option", choices=[str(key) for key in menu_automatico_manual.keys()]))
-            if option == 1:
-                if MyConfirm.ask("Do you want to auto-generate a random ticket?", default=True):
-                    for _ in range(num_tickets):
-                        num_bets = MyPrompt.ask(f"Enter number of bets")
-                        for _ in range(int(num_bets)):
-                            new_bet.set_bet_numbers(generate_valid_numbers())
-                            new_bet.set_bet_stars(generate_valid_stars())
-                            ticket.bets.append(new_bet)
-        if option == 2:
-            if MyConfirm.ask("Do you want to to generate a manual ticket?", default=True):
-                num_bets = MyPrompt.ask(f"Enter number of bets")
-                for i in range(int(num_bets)):
+            create_tickets()
+            if option == 2:
+                if MyConfirm.ask("Do you want to to generate a manual ticket?", default=True):
+                    num_bets = MyPrompt.ask(f"Enter number of bets")
+                    for i in range(int(num_bets)):
                         user_num_list = []
                         while len(user_num_list) < 5:
                             user_number = MyPrompt.ask(f"Enter Numbers {len(user_num_list) + 1}: ")
