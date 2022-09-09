@@ -25,36 +25,20 @@ MyPrompt = MyPrompt()
 
 console = Console()
 
-
-def retorno_menu():
+def print_menu(menu):
     menu_table = table.Table( show_header=True, header_style="bold magenta",
                                  title="Menu", expand=True, highlight=True
                                 )
     menu_table.add_column("ID", justify="center")
     menu_table.add_column("Opções", justify="left")
     menu_table.add_column("Descrições", justify="left")
-    for key, value in menu_retorno.items():
+    for key, value in menu.items():
         menu_table.add_row(str(key), value[0], value[1])
     console.print(menu_table)
+#Example
+#print_menu(menu_tickets)
 
-def principal_menu():
-    
-    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu",expand=True,highlight=True)
-    menu_table.add_column("ID", justify="center")
-    menu_table.add_column("Opções", justify="left")
-    menu_table.add_column("Descrições", justify="left")
-    for key, value in menu_principal.items():
-        menu_table.add_row(str(key), value[0],value[1] )
-    console.print(menu_table)
 
-def tickets_menu():
-    menu_table = table.Table(show_header=True, header_style="bold magenta", title="Menu",expand=True,highlight=True)
-    menu_table.add_column("ID", justify="center")
-    menu_table.add_column("Opções", justify="left")
-    menu_table.add_column("Descrições", justify="left")
-    for key, value in menu_tickets.items():
-        menu_table.add_row(str(key), value[0],value[1] )
-    console.print(menu_table)
 
 
 
@@ -95,7 +79,7 @@ class Bet:
         self.bet_stars = bet_stars
 
 def auto_generate_bet(self):
-        self.bet_numbers, self.bet_stars = generate_valid_numbers()
+    self.bet_numbers, self.bet_stars = generate_valid_numbers()
 
 def auto_generate_bet():
     numbers = []
@@ -210,39 +194,39 @@ def play_game():
 
     game.set_winning_stars(generate_valid_stars())
     
-    tickets_menu()
+    #tickets_menu()
+    #ticket = Ticket()
     while True:
-        option = int(MyPrompt.ask("Select an option", choices=[
-                     str(key) for key in menu_tickets.keys()]))
+        #option = int(MyPrompt.ask("Select an option", choices=[
+                     #str(key) for key in menu_tickets.keys()]))
         if option == 1:
-            ticket = Ticket()
-            try:
-                num_tickets = MyPrompt.ask(f"Enter number of tickets")
-                if 0 < num_tickets < 6:
-                    continue
-            except Exception as e:
-                print(e)
+            num_tickets = 0
+            while not num_tickets in range(1,6):
+                num_tickets = int(MyPrompt.ask(f"Enter number of tickets"))
+            option = int(MyPrompt.ask("Select an option", choices=[str(key) for key in menu_tickets.keys()]))
+            if option == 1:
                 if MyConfirm.ask("Do you want to auto-generate a random ticket?", default=True):
-                    num_bets = MyPrompt.ask(f"Enter number of bets")
-                    for _ in range(int(num_bets)):
-                        new_bet = Bet()
-                        new_bet.auto_generate_bet()
-                        ticket.bets.append(new_bet)
+                    for _ in range(num_tickets):
+                        num_bets = MyPrompt.ask(f"Enter number of bets")
+                        for _ in range(int(num_bets)):
+                            new_bet = Bet()
+                            new_bet.auto_generate_bet()
+                            ticket.bets.append(new_bet)
 
-                    bets_table = table.Table(show_header=True, header_style="bold magenta", expand=True, highlight=True)
-                    bets_table.add_column("Apostas", justify="center")
-                    bets_table.add_column("Números", justify="center")
-                    bets_table.add_column("Estrelas", justify="left")
+                        bets_table = table.Table(show_header=True, header_style="bold magenta", expand=True, highlight=True)
+                        bets_table.add_column("Apostas", justify="center")
+                        bets_table.add_column("Números", justify="center")
+                        bets_table.add_column("Estrelas", justify="left")
 
-                    for i in track(range(int(num_bets)), description="A Processar..."):
-                        time.sleep(1)
-                        tickets_numbers = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_numbers)
-                        tickets_stars = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_stars)
-                        bets_table.add_row('Aposta '+str(i + 1),tickets_numbers, tickets_stars)
-                    clear_screen()
-                    console.rule("Boletim", style="bold yellow")
-                    console.print(bets_table)
-                    console.line()
+                        for i in track(range(int(num_bets)), description="A Processar..."):
+                            time.sleep(1)
+                            tickets_numbers = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_numbers)
+                            tickets_stars = '  '.join(str(x).ljust(3) for x in ticket.bets[i].bet_stars)
+                            bets_table.add_row('Aposta '+str(i + 1),tickets_numbers, tickets_stars)
+                        clear_screen()
+                        console.rule("Boletim", style="bold yellow")
+                        console.print(bets_table)
+                        console.line()
         if option == 2:
             ticket = Ticket()
             new_bet = Bet()
@@ -288,25 +272,25 @@ def play_game():
                     console.print(bets_table)
                     console.line()
         time.sleep(5)
-        retorno_menu()
-        option = int(MyPrompt.ask("Select an option", choices=[str(key) for key in menu_retorno.keys()]))
-        if option == 1:
-            principal_menu()
-        elif option == 2:
-            tickets_menu()
-        elif option == 3:
-            exit()
+        #retorno_menu()
+        #option = int(MyPrompt.ask("Select an option", choices=[str(key) for key in menu_retorno.keys()]))
+        #if option == 1:
+        #    principal_menu()
+        #elif option == 2:
+        #    tickets_menu()
+        #elif option == 3:
+        #    exit()
 
         # elif option == 2:
         #    return
-        elif option == 2:
+        #elif option == 2:
             # exit()
-            console.print(check_if_user_won(ticket, game))
+        #    console.print(check_if_user_won(ticket, game))
 
 
 if __name__ == '__main__':
     while True:
-        principal_menu()
+        #principal_menu()
         option = int(MyPrompt.ask("Select an option", choices=[
                      str(key) for key in menu_principal.keys()]))
         if option == 1:
