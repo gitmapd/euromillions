@@ -6,6 +6,7 @@ from rich import table, prompt
 import time
 from rich.progress import track
 from rich.console import Console
+import sys
 
 console = Console()
 
@@ -36,7 +37,10 @@ menu_retorno =  {1: ['Menu Principal', 'Talões'],
                  2: ['Apostas', 'Menu Apostas'],
                  3: ['Sair', 'Sair do Programa']
                 }
-
+menu_automatico_manual = {1: ['Criar Boletins Automáticos', 'Um ou mais Tickets'],
+                          2: ['Criar boletins manuais', 'Sair do Programa'],
+                          3: ['Sair', 'Sair do Programa']
+                        }
 
 @dataclass
 class Game:
@@ -102,4 +106,26 @@ def play_game():
 
     print_menu(menu_principal)
     
+    while True:
+        ticket=Ticket()
+        option = int(MyPrompt.ask("Selecionar opção", choices=[
+            str(key) for key in menu_principal.keys()]))
+        if option == 1:
+            num_tickets = 0
+            while not num_tickets in range(1,6):
+                num_tickets = int(MyPrompt.ask(f"Introduza o número de boletins"))
+            print_menu(menu_automatico_manual)
+            option = int(MyPrompt.ask("Select an option", choices=[str(key) for key in menu_automatico_manual.keys()]))
+            if option == 1:
+                new_bet = Bet()
+                if MyConfirm.ask("Do you want to auto-generate a random ticket?", default=True):
+                    for _ in range(num_tickets):
+                        num_bets = MyPrompt.ask(f"Enter number of bets")
+                        for _ in range(int(num_bets)):
+                            new_bet.set_bet_numbers(generate_valid_numbers())
+                            new_bet.set_bet_stars(generate_valid_stars())
+                            ticket.bets.append(new_bet)
+        if option == 2:
+            sys.exit()            
+
 play_game()
