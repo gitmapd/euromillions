@@ -158,23 +158,27 @@ def clear_screen():
 
 
 def user_generate_valid_numbers(user_num_list):
-    for x in user_num_list:
-        if not x.isdigit():
-            raise ValueError("Número não é um dígito")
-        if len(list(filter(lambda y: y==x, user_num_list))) > 1:
-            raise ValueError("Número já existe")
-        if int(x) < 1 or int(x) > 50:
-            raise ValueError("Número deve estar entre 1 e 50")
+    while True:
+        for x in user_num_list:
+            if not x.isdigit():
+                raise ValueError("Número não é um dígito")
+            if len(list(filter(lambda y: y==x, user_num_list))) > 1:
+                raise ValueError("Número já existe")
+            if int(x) < 1 or int(x) > 50:
+                raise ValueError("Número deve estar entre 1 e 50")
+        break
     return user_num_list
 
 def user_generate_valid_stars(user_stars_list):
-    for x in user_stars_list:
-        if not x.isdigit():
-            raise ValueError("Estrela não é um dígito")
-        if len(list(filter(lambda y: y==x, user_stars_list))) > 1:
-            raise ValueError("Estrela já existe")
-        if int(x) < 1 or int(x) > 12:
-            raise ValueError("Estrela tem de ser entre 1 e 12")
+    while True:
+        for x in user_stars_list:
+            if not x.isdigit():
+                raise ValueError("Estrela não é um dígito")
+            if len(list(filter(lambda y: y==x, user_stars_list))) > 1:
+                raise ValueError("Estrela já existe")
+            if int(x) < 1 or int(x) > 12:
+                raise ValueError("Estrela tem de ser entre 1 e 12")
+        break
     return user_stars_list 
 
 # A prize consists how many numbers and stars are common to the
@@ -242,7 +246,6 @@ def play_game():
             if MyConfirm.ask("Do you want to to generate a manual ticket?", default=True):
                 num_bets = MyPrompt.ask(f"Enter number of bets")
                 for i in range(int(num_bets)):
-                    while True:
                         try:
                             user_num_list = []
                             while len(user_num_list) < 5:
@@ -265,7 +268,7 @@ def play_game():
                             continue
                         else:
                             break
-                    ticket.bets.append(new_bet)
+                ticket.bets.append(new_bet)
 
                 bets_table = table.Table(
                 show_header=True, header_style="bold magenta", expand=True, highlight=True)
