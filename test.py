@@ -1,3 +1,4 @@
+from asyncio import start_server
 from dataclasses import dataclass, field
 import random
 import os
@@ -6,6 +7,8 @@ from rich import table, prompt
 import time
 from rich.progress import track
 from rich.console import Console
+
+from ttt import tickets_menu
 
 class MyConfirm(prompt.Confirm):
     validate_error_message = "[prompt.invalid]Por favor introduzir S ou N"
@@ -132,7 +135,7 @@ prizes = {
     (2, 1): {"label": "12th prize"},
     (2, 0): {"label": "13th prize"},
 }
-
+                   
 
 def clear_screen():
     if os.name == 'posix':
@@ -140,6 +143,29 @@ def clear_screen():
     else:
         _ = os.system('cls')
 
+""" 
+Winnings numbers [1,2,3,4,5] [4,5]
+
+TICKETS  Bets   Numbers      Stars
+
+First    Bet 1: [1,2,3,4,5] [4,5]
+         Bet 2: ..........   ...
+         Bet 3: ..........   ...
+         ...
+         Bet 5  ..........   ....
+Second 
+   set() & set()
+
+
+TICKETS  Bets   Numbers      Stars Prize 
+
+First    Bet 1: [1,2,3,4,5] [4,5] 1st prize
+         Bet 2: ..........   ...  No prize
+         Bet 3: ..........   ...  13th prize
+         ...
+         Bet 5  ..........   ....
+Second  
+"""
 
 def user_generate_valid_numbers(user_num_list):
         for x in user_num_list:
@@ -182,7 +208,7 @@ def check_if_user_won(ticket, game):
         result2_len = len(result2)
         if (result1_len, result2_len) in prizes:
             p = prizes[(result1_len, result2_len)]
-            return (f'{p[0]}{p["label"]}')
+            return (f'{p["label"]}')
         else:
             return (f"YOU LOST!")
 
