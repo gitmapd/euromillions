@@ -132,7 +132,6 @@ def create_auto_tickets():
                 ticket.bets.append(new_bet)
 
 def make_tickets():
-        print_menu(menu_principal)
         option = int(MyPrompt.ask("Selecionar opção", choices=[
             str(key) for key in menu_principal.keys()]))
         if option == 1:
@@ -186,7 +185,7 @@ def play_game():
     game.set_winning_numbers(generate_valid_numbers())
 
     game.set_winning_stars(generate_valid_stars())
-
+    print_menu(menu_principal)
 if __name__=='__main__':
     while True:
           play_game()
