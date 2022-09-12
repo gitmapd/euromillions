@@ -48,8 +48,8 @@ def print_menu(menu):
 
 @dataclass
 class Game:
-    winning_numbers: list = field(default_factory=list)
-    winning_stars: list = field(default_factory=list)
+    winning_numbers: list[int] = field(default_factory=list)
+    winning_stars: list [int]= field(default_factory=list)
 
     def set_winning_numbers(self, winning_numbers: list):
         self.winning_numbers = winning_numbers
@@ -63,8 +63,8 @@ class Game:
 
 @dataclass
 class Bet:
-    bet_numbers: list = field(default_factory=list)
-    bet_stars: list = field(default_factory=list)
+    bet_numbers: list[int] = field(default_factory=list)
+    bet_stars: list[int] = field(default_factory=list)
 
     def set_bet_numbers(self, bet_numbers: list):
         self.bet_numbers = bet_numbers
@@ -76,7 +76,7 @@ class Bet:
 
 @dataclass
 class Ticket:
-    bets: list = field(default_factory=list)
+    bets: list[Bet] = field(default_factory=list)
 
 
 def generate_valid_numbers():
