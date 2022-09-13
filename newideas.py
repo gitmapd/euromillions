@@ -164,6 +164,15 @@ def show_prizes(ticket, game):
         if p:
             return p
 
+def tickets_valid_numbers(tickets_list):
+        for x in tickets_list:
+            if not x.isdigit():
+                raise ValueError("Número não é um dígito")
+            if int(x) < 1:
+                raise ValueError("Número tem de superior a 1")
+            
+        return tickets_list
+
 def main():
     ticket = Ticket()
     game = Game()
@@ -176,7 +185,15 @@ def main():
         if option == 1:
             clear_screen()
             tickets_list = []
-            number_of_tickets = int(MyPrompt.ask("How many tickets do you want?", default = 1))
+            while True:
+                number_of_tickets = MyPrompt.ask("How many tickets do you want?", default = 1)
+                try:
+                    tickets_valid_numbers(number_of_tickets)
+                except Exception as e:
+                     console.print(e, style="bold red")
+                else:
+                    number_of_tickets
+
             if MyConfirm.ask("Quer gerar um boletim automatico?", default=True):
                 number_of_bets = int(MyPrompt.ask("Quantas apostas?", choices=[str(i) for i in range(1, 6)]))
                 for _ in range(number_of_tickets):
