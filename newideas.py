@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 import random
-from num2words import num2words 
+from num2words import num2words
 import os
 import rich
 from rich import table, prompt
@@ -13,7 +13,8 @@ import time
 
 class MyConfirm(prompt.Confirm):
     validate_error_message = "[prompt.invalid]Por favor introduzir S ou N"
-    choices=['s','n']
+    choices = ['s', 'n']
+
 
 class MyPrompt(prompt.PromptBase):
     validate_error_message = "[prompt.invalid]Por favor entra um valor válido"
@@ -23,23 +24,23 @@ class MyPrompt(prompt.PromptBase):
     prompt_suffix = ": "
 
 
-
 MyConfirm = MyConfirm()
 MyPrompt = MyPrompt()
 
 console = Console()
 
-menu_principal ={1: ['Boletim Automático', 'Automático'],
-                 2: ['Boletim Manual', 'Manual'],
-                 3: ['Ver premios','Premios'],
-                 4: ['Sair', 'Saída'],
-                 5: ['Win',"Win"]
-                }
+menu_principal = {1: ['Boletim Automático', 'Automático'],
+                  2: ['Boletim Manual', 'Manual'],
+                  3: ['Ver premios', 'Premios'],
+                  4: ['Sair', 'Saída'],
+                  5: ['Win', "Win"]
+                  }
+
 
 def print_menu(menu):
-    menu_table = table.Table( show_header=True, header_style="bold magenta",
-                                 title="Menu", expand=True, highlight=True
-                                )
+    menu_table = table.Table(show_header=True, header_style="bold magenta",
+                             title="Menu", expand=True, highlight=True
+                             )
     menu_table.add_column("ID", justify="center")
     menu_table.add_column("Opções", justify="left")
     menu_table.add_column("Descrições", justify="left")
@@ -47,11 +48,12 @@ def print_menu(menu):
         menu_table.add_row(str(key), value[0], value[1])
     console.print(menu_table)
 
+
 @dataclass
 class Game:
     winning_numbers: list = field(default_factory=list)
     winning_stars: list = field(default_factory=list)
-    
+
     def set_winning_numbers(self, winning_numbers: list):
         self.winning_numbers = winning_numbers
 
@@ -62,17 +64,17 @@ class Game:
         self.set_winning_numbers(generate_valid_numbers())
         self.set_winning_stars(generate_valid_stars())
 
+
 @dataclass
 class Bet:
     bet_numbers: list = field(default_factory=list)
     bet_stars: list = field(default_factory=list)
-    
+
     def set_bet_numbers(self, bet_numbers: list):
         self.bet_numbers = bet_numbers
 
     def set_bet_stars(self, bet_stars: list):
         self.bet_stars = bet_stars
-
 
 
 @dataclass
@@ -87,6 +89,7 @@ def generate_valid_numbers():
         if temp_bet not in numbers:
             numbers.append(temp_bet)
     return numbers
+
 
 def generate_valid_stars():
     stars = []
@@ -122,25 +125,27 @@ def clear_screen():
 
 
 def user_generate_valid_numbers(user_num_list):
-        for x in user_num_list:
-            if not x.isdigit():
-                raise ValueError("Número não é um dígito")
-            if len(list(filter(lambda y: y==x, user_num_list))) > 1:
-                    raise ValueError("Número já existe")
-            if int(x) < 1 or int(x) > 50:
-                raise ValueError("Número deve estar entre 1 e 50")
-            
-        return user_num_list
+    for x in user_num_list:
+        if not x.isdigit():
+            raise ValueError("Número não é um dígito")
+        if len(list(filter(lambda y: y == x, user_num_list))) > 1:
+            raise ValueError("Número já existe")
+        if int(x) < 1 or int(x) > 50:
+            raise ValueError("Número deve estar entre 1 e 50")
+
+    return user_num_list
+
 
 def user_generate_valid_stars(user_stars_list):
-        for x in user_stars_list:
-            if not x.isdigit():
-                raise ValueError("Estrela não é um dígito")
-            if len(list(filter(lambda y: y==x, user_stars_list))) > 1:
-                raise ValueError("Estrela já existe")
-            if int(x) < 1 or int(x) > 12:
-                raise ValueError("Estrela tem de ser entre 1 e 12")
-        return user_stars_list 
+    for x in user_stars_list:
+        if not x.isdigit():
+            raise ValueError("Estrela não é um dígito")
+        if len(list(filter(lambda y: y == x, user_stars_list))) > 1:
+            raise ValueError("Estrela já existe")
+        if int(x) < 1 or int(x) > 12:
+            raise ValueError("Estrela tem de ser entre 1 e 12")
+    return user_stars_list
+
 
 def check_bet_prize(bet, game):
     winning_numbers = game.winning_numbers
@@ -157,21 +162,19 @@ def check_bet_prize(bet, game):
     return "Não há prémio"
 
 
-
 def show_prizes(ticket, game):
     for bet in ticket.bets:
         p = check_bet_prize(bet, game)
         if p:
             return p
 
-def tickets_valid_numbers(tickets_numbers):
-        for x in tickets_numbers:
-            if not x.isdigit():
-                raise ValueError("Número não é um dígito")
-            if int(x) < 1:
-                raise ValueError("Número tem de superior a 1")
-            
-        return tickets_numbers
+
+def tickets_valid_numbers(ticket_numbers):
+    if ticket_numbers < 1:
+        raise ValueError("Tem de ser superior a 1")
+    else:
+        return ticket_numbers
+
 
 def main():
     ticket = Ticket()
@@ -180,91 +183,122 @@ def main():
 
     while True:
         print_menu(menu_principal)
-        option = int(MyPrompt.ask("Selecione uma Opção", 
-                 choices=[str(key) for key in menu_principal.keys()]))
+        option = int(
+            MyPrompt.ask(
+                "Selecione uma Opção",
+                choices=[
+                    str(key) for key in menu_principal.keys()]))
         if option == 1:
-            clear_screen()
+            # clear_screen()
             tickets_list = []
             while True:
-                number_of_tickets = MyPrompt.ask("How many tickets do you want?", default = 1)
                 try:
+                    number_of_tickets = prompt.IntPrompt.ask(
+                        "Quantos boletins quer gerar?")
                     tickets_valid_numbers(number_of_tickets)
-                    number_of_tickets = int(number_of_tickets)
-                except Exception as e:
-                     console.print(e, style="bold red")
-                else:
-                    break
+                except ValueError as e:
+                    console.print(e)
+                break
 
-            if MyConfirm.ask("Quer gerar um boletim automatico?", default=True):
-                number_of_bets = int(MyPrompt.ask("Quantas apostas?", choices=[str(i) for i in range(1, 6)]))
+            if MyConfirm.ask(
+                "Quer gerar um boletim automatico?",
+                    default=True):
+                number_of_bets = int(
+                    MyPrompt.ask(
+                        "Quantas apostas?", choices=[
+                            str(i) for i in range(
+                                1, 6)]))
                 for _ in range(number_of_tickets):
                     ticket = Ticket()
                     for _ in range(number_of_bets):
-                        new_bet=Bet()
+                        new_bet = Bet()
                         new_bet.set_bet_numbers(generate_valid_numbers())
                         new_bet.set_bet_stars(generate_valid_stars())
                         ticket.bets.append(new_bet)
                     tickets_list.append(ticket)
-                bets_table = table.Table(show_header=True, header_style="bold magenta", expand=True, highlight=True)
+                bets_table = table.Table(
+                    show_header=True,
+                    header_style="bold magenta",
+                    expand=True,
+                    highlight=True)
                 bets_table.add_column("Tickets", justify="center")
                 bets_table.add_column("Apostas", justify="center")
                 bets_table.add_column("Números", justify="center")
                 bets_table.add_column("Estrelas", justify="left")
                 for ticket_num, ticket in enumerate(tickets_list):
                     for bet_num, bet in enumerate(ticket.bets):
-                        bet_numbers = '  '.join(str(x).ljust(3) for x in bet.bet_numbers)
-                        bet_stars = '  '.join(str(x).ljust(3) for x in bet.bet_stars)
+                        bet_numbers = '  '.join(
+                            str(x).ljust(3) for x in bet.bet_numbers)
+                        bet_stars = '  '.join(str(x).ljust(3)
+                                              for x in bet.bet_stars)
+                        bets_table.add_row(str(ticket_num +
+                                               1) if bet_num == 0 else "", str(bet_num +
+                                                                               1), bet_numbers, bet_stars)
 
-                        bets_table.add_row(str(ticket_num+1) if bet_num == 0 else "",str(bet_num+1),bet_numbers, bet_stars)
-                
                 console.rule("Boletim", style="bold yellow")
                 console.print(bets_table)
                 console.line()
-                time.sleep(5)          
+                time.sleep(5)
         if option == 2:
             clear_screen()
             ticket = Ticket()
             new_bet = Bet()
             if MyConfirm.ask("Quer gerar um boletim manual?", default=True):
-                number_of_bets = int(MyPrompt.ask("Quantas apostas?", choices=[str(i) for i in range(1, 6)]))
+                number_of_bets = int(
+                    MyPrompt.ask(
+                        "Quantas apostas?", choices=[
+                            str(i) for i in range(
+                                1, 6)]))
                 for i in range(int(number_of_bets)):
-                        user_num_list = []
-                        while len(user_num_list) < 5:
-                            
-                            user_number = MyPrompt.ask(f'Introduza os Números, o {num2words(len(user_num_list)+1,lang="pt",to="ordinal_num")}')
-                            try:
-                                user_generate_valid_numbers(user_num_list + [user_number])
-                            except Exception as e:
-                                console.print(e, style="bold red")
-                            else:
-                                user_num_list.append(user_number)
-                        user_num_list = list(map(lambda x: int(x),user_num_list))
-                        user_stars_list = []
-                        while len(user_stars_list) < 2:
-                            user_star = MyPrompt.ask(f'Introduza as Estrelas, o {num2words(len(user_stars_list) + 1,lang="pt",to="ordinal_num")}')
-                            try:
-                                user_generate_valid_stars(user_stars_list + [user_star])
-                            except Exception as e:
-                                console.print(e, style="bold red")
-                            else:
-                                user_stars_list.append(user_star)
-                        user_stars_list = list(map(lambda x: int(x),user_stars_list)) 
-                        new_bet.set_bet_numbers(user_num_list)
-                        new_bet.set_bet_stars(user_stars_list)
-                        
-                        ticket.bets.append(new_bet)
+                    user_num_list = []
+                    while len(user_num_list) < 5:
+
+                        user_number = MyPrompt.ask(
+                            f'Introduza os Números, o {num2words(len(user_num_list)+1,lang="pt",to="ordinal_num")}')
+                        try:
+                            user_generate_valid_numbers(
+                                user_num_list + [user_number])
+                        except Exception as e:
+                            console.print(e, style="bold red")
+                        else:
+                            user_num_list.append(user_number)
+                    user_num_list = list(map(lambda x: int(x), user_num_list))
+                    user_stars_list = []
+                    while len(user_stars_list) < 2:
+                        user_star = MyPrompt.ask(
+                            f'Introduza as Estrelas, o {num2words(len(user_stars_list) + 1,lang="pt",to="ordinal_num")}')
+                        try:
+                            user_generate_valid_stars(
+                                user_stars_list + [user_star])
+                        except Exception as e:
+                            console.print(e, style="bold red")
+                        else:
+                            user_stars_list.append(user_star)
+                    user_stars_list = list(
+                        map(lambda x: int(x), user_stars_list))
+                    new_bet.set_bet_numbers(user_num_list)
+                    new_bet.set_bet_stars(user_stars_list)
+
+                    ticket.bets.append(new_bet)
                 bets_table = table.Table(
-                show_header=True, header_style="bold magenta", expand=True, highlight=True)
+                    show_header=True,
+                    header_style="bold magenta",
+                    expand=True,
+                    highlight=True)
                 bets_table.add_column("Apostas", justify="center")
                 bets_table.add_column("Números", justify="center")
                 bets_table.add_column("Estrelas", justify="left")
 
-                for i in track(range(int(number_of_bets)), description="A Processar..."):
-                    time.sleep(1) 
+                for i in track(range(int(number_of_bets)),
+                               description="A Processar..."):
+                    time.sleep(1)
                     bet = ticket.bets[i]
-                    tickets_numbers = '  '.join(str(x).ljust(3) for x in bet.bet_numbers)
-                    tickets_stars = '  '.join(str(x).ljust(3) for x in bet.bet_stars)
-                    bets_table.add_row('Aposta '+str(i + 1), tickets_numbers, tickets_stars)
+                    tickets_numbers = '  '.join(
+                        str(x).ljust(3) for x in bet.bet_numbers)
+                    tickets_stars = '  '.join(
+                        str(x).ljust(3) for x in bet.bet_stars)
+                    bets_table.add_row('Aposta ' + str(i + 1),
+                                       tickets_numbers, tickets_stars)
                     console.rule("Boletim", style="bold yellow")
                     console.print(bets_table)
                     console.line()
@@ -273,48 +307,64 @@ def main():
         if option == 3:
             clear_screen()
             if MyConfirm.ask("Quer ver os seus prémios?", default=True):
-                bets_table = table.Table(show_header=True, header_style="bold magenta", expand=True, highlight=True)
+                bets_table = table.Table(
+                    show_header=True,
+                    header_style="bold magenta",
+                    expand=True,
+                    highlight=True)
                 bets_table.add_column("Apostas", justify="center")
-                bets_table.add_column("Numeros", justify="left")
+                bets_table.add_column("Numeros", justify="center")
                 bets_table.add_column("Estrelas", justify="left")
-                bets_table.add_column("Premios", justify="left")
-                bets_table.add_column("Chave", justify="left") 
-                bets_table.add_column("Vencedora", justify="left")
-                game_numbers = '  '.join(('[green]' + str(x).ljust(3) + '[/green]') if x in game.winning_numbers else str(x).ljust(3) for x in game.winning_numbers)
-                game_stars = '  '.join(('[yellow]'+ str(x).ljust(3) + '[/yellow]') if x in game.winning_stars else str(x).ljust(3) for x in game.winning_stars)
+                bets_table.add_column("Premios", justify="center")
+                bets_table.add_column("Chave Vencedora", justify="center")
+                #bets_table.add_column("Vencedora", justify="left")
+                game_numbers = '  '.join(
+                    ('[green]' +
+                     str(x).ljust(3) +
+                        '[/green]') for x in game.winning_numbers)
+                game_stars = '  '.join(
+                    (' [yellow]' +
+                     str(x).ljust(2) +
+                        '[/yellow]') for x in game.winning_stars)
+                game_total = game_numbers + game_stars
                 num_bets = range(int(len(ticket.bets)))
                 for i in track(num_bets, description="A Processar..."):
                     time.sleep(1)
                     bet = ticket.bets[i]
-                    tickets_numbers = '  '.join(('[green]' + str(x).ljust(3) + '[/green]') if x in game.winning_numbers else str(x).ljust(3) for x in bet.bet_numbers)
-                    tickets_stars = '  '.join(('[yellow]'+ str(x).ljust(3) + '[/yellow]') if x in game.winning_stars else str(x).ljust(3) for x in bet.bet_stars)
+                    tickets_numbers = '  '.join(
+                        ('[green]' +
+                         str(x).ljust(4) +
+                            '[/green]') if x in game.winning_numbers else str(x).ljust(4) for x in bet.bet_numbers)
+                    tickets_stars = '  '.join(
+                        ('[yellow]' +
+                         str(x).ljust(3) +
+                            '[/yellow]') if x in game.winning_stars else str(x).ljust(3) for x in bet.bet_stars)
                     bets_table.add_row(
-                        'Aposta '+str(i+1),
+                        'Aposta ' + str(i + 1),
                         tickets_numbers,
                         tickets_stars,
                         str(check_bet_prize(bet, game)),
-                        game_numbers if i == 0 else "",
-                        game_stars if i == 0 else ""
-                   	)
-                
-                
+                        #game_numbers if i == 0 else "",
+                        #game_stars if i == 0 else ""
+                        game_total if i == 0 else ""
+                    )
+
                 console.rule("Boletim", style="bold yellow")
                 console.print(bets_table)
                 console.line()
                 time.sleep(5)
         if option == 4:
             clear_screen()
-            console.print("Obrigado por ter jogado",style="bold red")
+            console.print("Obrigado por ter jogado", style="bold red")
             sys.exit()
-        
+
         if option == 5:
             winning_bet = Bet()
             winning_bet.set_bet_numbers(game.winning_numbers)
             winning_bet.set_bet_stars(game.winning_stars)
             ticket.bets.append(winning_bet)
             print(winning_bet)
-            
+
 
 if __name__ == '__main__':
-	main()
-
+    main()
