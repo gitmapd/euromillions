@@ -193,7 +193,6 @@ def main():
                 time.sleep(5)
         if option == 2:
             clear_screen()
-            ticket = Ticket()
             new_bet = Bet()
             if MyConfirm.ask("Quer gerar um boletim manual?", default=True):
                 number_of_bets = int(MyPrompt.ask("Quantas apostas?", choices=[str(i) for i in range(1, 6)]))
