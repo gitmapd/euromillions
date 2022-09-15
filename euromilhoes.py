@@ -248,10 +248,9 @@ def main():
                 bets_table.add_column("Numeros", justify="left")
                 bets_table.add_column("Estrelas", justify="left")
                 bets_table.add_column("Premios", justify="left")
-                bets_table.add_column("Chave", justify="left")
-                bets_table.add_column("Vencedora", justify="left")
-                game_numbers = '  '.join(('[green]' + str(x) + '[/green]').ljust(3) for x in game.winning_numbers)
-                game_stars = '  '.join(('[yellow]'+ str(x) + '[/yellow]').ljust(3) for x in game.winning_stars)
+                bets_table.add_column("Chave Vencedora", justify="left")
+                game_numbers = '  '.join(('[green]' + str(x).ljust(4) + '[/green]') for x in game.winning_numbers)
+                game_stars = '  '.join((' [yellow]'+ str(x).ljust(3) + '[/yellow]') for x in game.winning_stars)
                 game_total = game_numbers + game_stars
                 num_bets = range(int(len(ticket.bets)))
                 for i in track(num_bets, description="A Processar..."):
