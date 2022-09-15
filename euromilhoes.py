@@ -156,13 +156,6 @@ def check_bet_prize(bet, game):
     return "Não há prémio"
 
 
-
-def show_prizes(ticket, game):
-    for bet in ticket.bets:
-        p = check_bet_prize(bet, game)
-        if p:
-            return p
-
 def main():
     ticket = Ticket()
     game = Game()
@@ -187,7 +180,7 @@ def main():
                 bets_table.add_column("Números", justify="center")
                 bets_table.add_column("Estrelas", justify="left")
 
-                for i in track(range(int(number_of_bets)), description="A Processar..."):
+                for i in track(range(number_of_bets), description="A Processar..."):
                     time.sleep(1)
                     bet = ticket.bets[i]
                     tickets_numbers = '  '.join(str(x).ljust(3) for x in bet.bet_numbers)
@@ -236,7 +229,7 @@ def main():
                 bets_table.add_column("Números", justify="center")
                 bets_table.add_column("Estrelas", justify="left")
 
-                for i in track(range(int(number_of_bets)), description="A Processar..."):
+                for i in track(range(number_of_bets), description="A Processar..."):
                     time.sleep(1)
                     bet = ticket.bets[i]
                     tickets_numbers = '  '.join(str(x).ljust(3) for x in bet.bet_numbers)
@@ -257,8 +250,9 @@ def main():
                 bets_table.add_column("Premios", justify="left")
                 bets_table.add_column("Chave", justify="left")
                 bets_table.add_column("Vencedora", justify="left")
-                game_numbers = '  '.join(('[green]' + str(x) + '[/green]').ljust(3) if x in game.winning_numbers else str(x).ljust(3) for x in game.winning_numbers)
-                game_stars = '  '.join(('[yellow]'+ str(x) + '[/yellow]').ljust(3) if x in game.winning_stars else str(x).ljust(3) for x in game.winning_stars)
+                game_numbers = '  '.join(('[green]' + str(x) + '[/green]').ljust(3) for x in game.winning_numbers)
+                game_stars = '  '.join(('[yellow]'+ str(x) + '[/yellow]').ljust(3) for x in game.winning_stars)
+                game_total = game_numbers + game_stars
                 num_bets = range(int(len(ticket.bets)))
                 for i in track(num_bets, description="A Processar..."):
                     time.sleep(1)
@@ -270,8 +264,7 @@ def main():
                         tickets_numbers,
                         tickets_stars,
                         str(check_bet_prize(bet, game)),
-                        game_numbers if i == 0 else "",
-                        game_stars if i == 0 else ""
+                        game_total if i == 0 else ""
                    	)
 
 
